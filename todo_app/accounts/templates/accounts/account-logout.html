@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div class="h3 d-flex justify-content-center text-dark">
+        Are you sure you want to log out?
+    </div>
+
+     <div class="h4 d-flex justify-content-center">
+        <ul class="list-unstyled list-group list-group-horizontal">
+            <li class="mr-5">
+                 <form method="post" action="{% url 'accounts:logout-account' %}">
+                     {{ form }}
+                     <button type="submit" class="btn btn-outline-primary btn-lg">Yes</button>
+                     {% csrf_token %}
+                 </form>
+            </li>
+            <li class="ml-5">
+                <a class="text-dark" href="{% url 'accounts:home-page' %}">
+                    <button type="button" class="btn btn-outline-primary btn-lg">
+                        No
+                    </button>
+                </a>
+            </li>
+         </ul>
+    </div>
+{% endblock %}

@@ -1,0 +1,31 @@
+<nav class="py-5 mb-3 bg-primary">
+    <div class="nav-link float-left">
+        <h3>
+            <a class="nav-link bg-dark text-white rounded" href="{% url 'accounts:home-page' %}">To-Do</a>
+        </h3>
+    </div>
+
+    <ul class="nav nav-tabs justify-content-end">
+        {% if not user.is_authenticated or user.is_superuser %}
+            <li class="nav-item"><a class="nav-link bg-success text-white"
+                                    href="{% url 'accounts:create-account' %}">Create Account</a></li>
+            <li class="nav-link disabled text-light">or</li>
+            <li class="nav-item"><a class="nav-link bg-success text-white mr-3"
+                                    href="{% url 'accounts:login-account' %}">Login</a></li>
+
+        {% else %}
+            <div class="navbar navbar-inverse navbar-fixed-top text-white
+              mr-2">
+                Welcome, {{ user.username }}
+            </div>
+            <li class="nav-item"><a class="nav-link active bg-secondary text-white"
+                                    href="{% url 'tasks:catalogue' %}">My Tasks</a></li>
+            <li class="nav-item"><a class="nav-link active bg-success text-white ml-2"
+                                    href="{% url 'tasks:add-task' %}">Add new Task</a></li>
+            <li class="nav-item"><a class="nav-link active bg-secondary text-white ml-2"
+                                    href="{% url 'tasks:completed-tasks' %}">Completed Tasks</a></li>
+            <li class="nav-item"><a class="nav-link ml-2 mr-4 text-white"
+                                    href="{% url 'accounts:logout-account' %}">Logout</a></li>
+        {% endif %}
+    </ul>
+</nav>
