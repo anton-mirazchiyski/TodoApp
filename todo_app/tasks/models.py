@@ -22,14 +22,11 @@ class Task(models.Model):
 
     moved_to_completed = models.BooleanField(null=True, default=False)
 
+    date_of_completion = models.DateField(null=True, blank=False)
+
     account = models.ForeignKey(Account,
                                 on_delete=models.CASCADE,
                                 null=True)
-
-    # def save(self, *args, **kwargs):
-    #     if self.due_date < datetime.date.today():
-    #         raise ValidationError('The date cannot be in the past!')
-    #     super(Task, self).save(*args, **kwargs)
 
     def __str__(self):
         return f'{self.name} for {self.due_date}'

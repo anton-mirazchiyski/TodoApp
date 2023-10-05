@@ -1,3 +1,5 @@
+from datetime import date
+
 from django.shortcuts import render, redirect
 
 from todo_app.accounts.models import Account
@@ -53,6 +55,7 @@ def details_task(request, pk):
             return redirect('tasks:catalogue')
         elif 'done' in request.POST:
             current_task.is_done = True
+            current_task.date_of_completion = date.today()
             current_task.save()
             return redirect('tasks:catalogue')
         elif 'move' in request.POST:
