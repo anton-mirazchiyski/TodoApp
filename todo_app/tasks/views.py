@@ -22,6 +22,9 @@ def show_completed_tasks(request):
     current_account = Account.objects.get(username=request.user.username)
     completed_tasks = current_account.task_set.filter(moved_to_completed=True)
 
+    if request.method == 'POST':
+        completed_tasks.delete()
+
     return render(request,
                   'tasks/tasks-completed.html',
                   {'completed_tasks': completed_tasks})
