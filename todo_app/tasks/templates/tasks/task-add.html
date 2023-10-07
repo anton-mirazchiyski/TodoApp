@@ -2,6 +2,7 @@
 
 {% block content %}
     <div class="d-flex justify-content-center">
+        {{ form.media }}
         <form method="post" action="{% url 'tasks:add-task' %}">
             <label class="form-label">What</label>
             <div class="form-group">

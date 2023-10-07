@@ -1,3 +1,4 @@
+from bootstrap_datepicker_plus.widgets import DatePickerInput
 from django import forms
 
 from todo_app.tasks.models import Task
@@ -18,22 +19,23 @@ class TaskAddForm(forms.ModelForm):
             'name': forms.TextInput(
                 attrs={
                     'class': 'form-control-lg',
-                    # 'style': 'height: 100%',
                     'placeholder': 'Name'
                 }
             ),
             'description': forms.Textarea(
                 attrs={
                     'class': 'form-control-lg',
-                    'style': 'height: 100%; width: 80%',
+                    'style': 'height: 50%; width: 60%',
                     'placeholder': 'Description'
                 }
             ),
-            'due_date': forms.DateInput(
+            'due_date': DatePickerInput(
+                options={
+                    'format': "MM/DD/YYYY"
+                },
                 attrs={
                     'class': 'form-control-lg',
-                    'placeholder': 'Ex: 2023-09-22'
+                    'style': 'width: 35%'
                 }
             )
         }
-
