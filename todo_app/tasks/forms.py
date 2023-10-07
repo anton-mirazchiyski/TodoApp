@@ -25,7 +25,7 @@ class TaskAddForm(forms.ModelForm):
             'description': forms.Textarea(
                 attrs={
                     'class': 'form-control-lg',
-                    'style': 'height: 50%; width: 60%',
+                    'style': 'height: 50%; width: 80%',
                     'placeholder': 'Description'
                 }
             ),
@@ -35,7 +35,7 @@ class TaskAddForm(forms.ModelForm):
                 },
                 attrs={
                     'class': 'form-control-lg',
-                    'style': 'width: 35%'
+                    'style': 'width: 50%'
                 }
             )
         }
