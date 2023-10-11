@@ -18,6 +18,8 @@ class Task(models.Model):
     due_date = models.DateField(validators=[validate_date_is_not_in_the_past],
                                 null=False, blank=False)
 
+    time = models.TimeField(null=True, blank=True)
+
     is_done = models.BooleanField(null=True, default=False)
 
     moved_to_completed = models.BooleanField(null=True, default=False)

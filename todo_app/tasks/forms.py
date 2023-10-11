@@ -1,4 +1,4 @@
-from bootstrap_datepicker_plus.widgets import DatePickerInput
+from bootstrap_datepicker_plus.widgets import DatePickerInput, TimePickerInput
 from django import forms
 
 from todo_app.tasks.models import Task
@@ -7,12 +7,13 @@ from todo_app.tasks.models import Task
 class TaskAddForm(forms.ModelForm):
     class Meta:
         model = Task
-        fields = ['name', 'description', 'due_date']
+        fields = ['name', 'description', 'due_date', 'time']
 
         labels = {
                 'name': 'What',
                 'due_date': 'When',
-                'description': 'Describe',
+                'description': 'Description',
+                'time': 'At'
                  }
 
         widgets = {
@@ -31,11 +32,22 @@ class TaskAddForm(forms.ModelForm):
             ),
             'due_date': DatePickerInput(
                 options={
-                    'format': "MM/DD/YYYY"
+                    'format': "MM-DD-YYYY"
                 },
                 attrs={
                     'class': 'form-control-lg',
-                    'style': 'width: 50%'
+                    'style': 'width: 50%',
+                    'placeholder': 'Date'
+                }
+            ),
+            'time': TimePickerInput(
+                options={
+                    'format': 'HH:mm'
+                },
+                attrs={
+                    'class': 'form-control-lg',
+                    'style': 'width: 50%',
+                    'placeholder': 'Hour'
                 }
             )
         }
