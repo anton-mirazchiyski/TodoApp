@@ -1,4 +1,4 @@
-from datetime import date
+import datetime
 
 from django.shortcuts import render, redirect
 
@@ -13,9 +13,15 @@ def show_all_tasks(request):
     tasks = current_account.task_set.filter(moved_to_completed=False).order_by('id')
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
 
+    current_date = datetime.date.today()
+
     return render(request,
                   'tasks/tasks-catalogue.html',
-                  {'tasks': tasks, 'has_completed_tasks': has_completed_tasks})
+                  {
+                      'tasks': tasks,
+                      'has_completed_tasks': has_completed_tasks,
+                      'current_date': current_date
+                        })
 
 
 def show_completed_tasks(request):
@@ -58,7 +64,7 @@ def details_task(request, pk):
             return redirect('tasks:catalogue')
         elif 'done' in request.POST:
             current_task.is_done = True
-            current_task.date_of_completion = date.today()
+            current_task.date_of_completion = datetime.date.today()
             current_task.save()
             return redirect('tasks:catalogue')
         elif 'move' in request.POST:
