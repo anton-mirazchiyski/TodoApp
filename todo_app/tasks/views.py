@@ -7,12 +7,24 @@ from todo_app.tasks.forms import TaskAddForm
 from todo_app.tasks.models import Task
 
 
+def find_next_task(tasks):
+    today_tasks = [t for t in tasks if t.due_date == datetime.date.today()]
+    if today_tasks:
+        min_time = min([t.time for t in today_tasks if not t.is_done])
+        for task in today_tasks:
+            if task.time == min_time:
+                return task
+
+    upcoming_tasks = [t for t in tasks if t.due_date > datetime.date.today()]
+    
+
 def show_all_tasks(request):
     current_username = request.user.username
     current_account = Account.objects.get(username=current_username)
     tasks = current_account.task_set.filter(moved_to_completed=False).order_by('id')
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
 
+    next_task = find_next_task(list(tasks))
     current_date = datetime.date.today()
 
     return render(request,
@@ -20,6 +32,7 @@ def show_all_tasks(request):
                   {
                       'tasks': tasks,
                       'has_completed_tasks': has_completed_tasks,
+                      'next_task': next_task,
                       'current_date': current_date
                         })
 
