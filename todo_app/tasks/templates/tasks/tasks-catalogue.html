@@ -10,11 +10,14 @@
         </div>
     {% else %}
         {% if next_task %}
-            <div class="float-left">
-                <h5>Next task: {{ next_task.name|capfirst }}</h5>
+            <div class="float-left ml-2 text-wrap" style="width: 12rem">
+                <h5>
+                    Next task: <a href="{% url 'tasks:details-task' next_task.pk %}">
+                    {{ next_task.name|capfirst }}</a>
+                </h5>
             </div>
         {% else %}
-            <div class="float-left">You have no upcoming tasks</div>
+            <div class="float-left ml-3 text-wrap" style="width: 10rem">You have no upcoming tasks</div>
         {% endif %}
 
         <div class="float-right mt-2 mr-5">
