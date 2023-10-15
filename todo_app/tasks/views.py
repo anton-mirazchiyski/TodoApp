@@ -5,25 +5,7 @@ from django.shortcuts import render, redirect
 from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm
 from todo_app.tasks.models import Task
-
-
-def find_next_task(tasks):
-    today_tasks = [t for t in tasks if t.due_date == datetime.date.today()]
-    if today_tasks:
-        try:
-            min_time = min([t.time for t in today_tasks if not t.is_done])
-            for task in today_tasks:
-                if task.time == min_time:
-                    return task
-        except ValueError:
-            min_time = None
-
-    upcoming_tasks = [t for t in tasks if t.due_date > datetime.date.today()]
-    if upcoming_tasks:
-        min_time = min([t.time for t in upcoming_tasks if not t.is_done])
-        for task in upcoming_tasks:
-            if task.time == min_time:
-                return task
+from utils.tasks_utils import find_next_task
 
 
 def show_all_tasks(request):
@@ -42,7 +24,7 @@ def show_all_tasks(request):
                       'has_completed_tasks': has_completed_tasks,
                       'next_task': next_task,
                       'current_date': current_date
-                        })
+                  })
 
 
 def show_completed_tasks(request):
