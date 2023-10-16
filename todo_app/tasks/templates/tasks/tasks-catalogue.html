@@ -26,23 +26,19 @@
 
         <div class="d-flex justify-content-center mb-2 pr-5
         text-secondary">
-            <h3 class="border border-primary ml-5 p-2 rounded">Tasks currently:</h3>
+            <h3 class="ml-5 p-2 rounded">Tasks currently:</h3>
         </div>
 
         {% for task in tasks %}
             <a class="text-decoration-none" href="{% url 'tasks:details-task' task.pk %}">
-                <div class="mb-3 ml-3 mr-4 rounded bg-dark text-white
-                row border border-warning">
+                <div class="task mb-3 ml-3 mr-4 rounded
+                row border">
                     <div class="col pt-3">
                         {{ forloop.counter }}
                     </div>
 
                     <div class="col h5 mr-3 pb-2 pt-3">
                         {{ task.name|capfirst }}
-                    </div>
-
-                    <div class="col h5 pt-3 pr-5">
-                        <------------------------>
                     </div>
 
                     <div class="col h6 ml-3 pt-3">
