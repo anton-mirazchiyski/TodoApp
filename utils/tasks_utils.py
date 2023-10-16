@@ -14,7 +14,9 @@ def find(tasks):
 def find_next_task(tasks):
     today_tasks = [t for t in tasks if t.due_date == datetime.date.today()]
     if today_tasks:
-        return find(today_tasks)
+        if find(today_tasks) is not None:
+            task = find(today_tasks)
+            return task
 
     upcoming_tasks = [t for t in tasks if t.due_date > datetime.date.today()]
     if upcoming_tasks:
