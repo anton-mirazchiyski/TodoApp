@@ -13,18 +13,24 @@ def show_all_tasks(request):
     current_account = Account.objects.get(username=current_username)
     tasks = current_account.task_set.filter(moved_to_completed=False).order_by('id')
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
+    done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
 
     next_task = find_next_task(list(tasks))
     current_date = datetime.date.today()
 
-    return render(request,
-                  'tasks/tasks-catalogue.html',
-                  {
-                      'tasks': tasks,
-                      'has_completed_tasks': has_completed_tasks,
-                      'next_task': next_task,
-                      'current_date': current_date
-                  })
+    if request.method == 'POST':
+        if 'move' in request.POST:
+            current_account.task_set.bulk_update(done_tasks, ['moved_to_completed'])
+
+    context = {
+        'tasks': tasks,
+        'has_completed_tasks': has_completed_tasks,
+        'next_task': next_task,
+        'current_date': current_date,
+        'number_of_tasks_done': done_tasks.count()
+    }
+
+    return render(request,'tasks/tasks-catalogue.html', context)
 
 
 def show_completed_tasks(request):
