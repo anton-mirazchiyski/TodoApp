@@ -34,16 +34,30 @@ def show_all_tasks(request):
     return render(request,'tasks/tasks-catalogue.html', context)
 
 
+def place_completed_tasks_by_dates(tasks):
+    tasks_with_dates = {}
+
+    for task in tasks:
+        if task.due_date not in tasks_with_dates:
+            tasks_with_dates[task.due_date] = []
+        tasks_with_dates[task.due_date].append(task)
+
+    return tasks_with_dates
+
+
 def show_completed_tasks(request):
     current_account = Account.objects.get(username=request.user.username)
     completed_tasks = current_account.task_set.filter(moved_to_completed=True)
+
+    tasks_with_dates = place_completed_tasks_by_dates(list(completed_tasks))
 
     if request.method == 'POST':
         completed_tasks.delete()
 
     return render(request,
                   'tasks/tasks-completed.html',
-                  {'completed_tasks': completed_tasks})
+                  {'completed_tasks': completed_tasks,
+                   'tasks_with_dates': tasks_with_dates})
 
 
 def add_task(request):
