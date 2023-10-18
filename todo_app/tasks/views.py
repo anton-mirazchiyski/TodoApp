@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm
 from todo_app.tasks.models import Task
-from utils.tasks_utils import find_next_task
+from utils.tasks_utils import find_next_task, move_done_tasks_to_completed
 
 
 def show_all_tasks(request):
@@ -20,7 +20,8 @@ def show_all_tasks(request):
 
     if request.method == 'POST':
         if 'move' in request.POST:
-            current_account.task_set.bulk_update(done_tasks, ['moved_to_completed'])
+            move_done_tasks_to_completed(tasks)
+            return redirect('tasks:catalogue')
 
     context = {
         'tasks': tasks,

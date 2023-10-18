@@ -21,3 +21,10 @@ def find_next_task(tasks):
     upcoming_tasks = [t for t in tasks if t.due_date > datetime.date.today()]
     if upcoming_tasks:
         return find(upcoming_tasks)
+
+
+def move_done_tasks_to_completed(tasks):
+    for task in tasks:
+        if task.is_done:
+            task.moved_to_completed = True
+            task.save()
