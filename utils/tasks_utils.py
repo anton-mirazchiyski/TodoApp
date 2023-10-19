@@ -28,3 +28,14 @@ def move_done_tasks_to_completed(tasks):
         if task.is_done:
             task.moved_to_completed = True
             task.save()
+
+
+def place_completed_tasks_by_dates(tasks):
+    tasks_with_dates = {}
+
+    for task in tasks:
+        if task.due_date not in tasks_with_dates:
+            tasks_with_dates[task.due_date] = []
+        tasks_with_dates[task.due_date].append(task)
+
+    return tasks_with_dates
