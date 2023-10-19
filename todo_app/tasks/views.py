@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm
 from todo_app.tasks.models import Task
-from utils.tasks_utils import find_next_task, move_done_tasks_to_completed
+from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates
 
 
 def show_all_tasks(request):
@@ -34,17 +34,6 @@ def show_all_tasks(request):
     return render(request,'tasks/tasks-catalogue.html', context)
 
 
-def place_completed_tasks_by_dates(tasks):
-    tasks_with_dates = {}
-
-    for task in tasks:
-        if task.due_date not in tasks_with_dates:
-            tasks_with_dates[task.due_date] = []
-        tasks_with_dates[task.due_date].append(task)
-
-    return tasks_with_dates
-
-
 def show_completed_tasks(request):
     current_account = Account.objects.get(username=request.user.username)
     completed_tasks = current_account.task_set.filter(moved_to_completed=True)
@@ -54,10 +43,12 @@ def show_completed_tasks(request):
     if request.method == 'POST':
         completed_tasks.delete()
 
-    return render(request,
-                  'tasks/tasks-completed.html',
-                  {'completed_tasks': completed_tasks,
-                   'tasks_with_dates': tasks_with_dates})
+    context = {
+        'completed_tasks': completed_tasks,
+        'tasks_with_dates': tasks_with_dates
+    }
+
+    return render(request,'tasks/tasks-completed.html', context)
 
 
 def add_task(request):
@@ -80,7 +71,8 @@ def add_task(request):
 
 
 def details_task(request, pk):
-    current_task = Task.objects.get(pk=pk)
+    current_account = Account.objects.get(username=request.user.username)
+    current_task = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':
         if 'delete' in request.POST:

@@ -4,16 +4,21 @@
     <div class="d-flex justify-content-center">
         <h4>Completed:</h4>
     </div>
-    <table class="table">
-    {% for date, tasks in tasks_with_dates.items %}
-        <tr>
-        <td>for {{ date }}</td>
-        {% for task in tasks %}
-            <td>{{ task.name }}</td>
-        {% endfor %}
-        </tr>
-    {% endfor %}
-    </table>
+    <div class="table-responsive">
+        <table class="table table-primary">
+            {% for date, tasks in tasks_with_dates.items %}
+                <tr>
+                    <th>for {{ date }}</th>
+                    {% for task in tasks %}
+                        <td>
+                            <a href="{% url 'tasks:details-task' task.pk %}"
+                               class="text-decoration-none text-dark">{{ task.name }}</a>
+                        </td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
     {% if completed_tasks %}
         <div class="d-flex justify-content-center pb-3">
             <form method="post" action="{% url 'tasks:completed-tasks' %}">
