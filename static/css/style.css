@@ -1,4 +1,8 @@
 .task {
-    background-color: silver;
+    background-color: #3EB489;
     color: darkblue;
+}
+
+body {
+    background-color: #ef6769;
 }
