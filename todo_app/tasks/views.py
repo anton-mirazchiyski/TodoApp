@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render, redirect
 
 from todo_app.accounts.models import Account
-from todo_app.tasks.forms import TaskAddForm
+from todo_app.tasks.forms import TaskAddForm, TaskEditForm
 from todo_app.tasks.models import Task
 from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates
 
@@ -31,7 +31,7 @@ def show_all_tasks(request):
         'number_of_tasks_done': done_tasks.count()
     }
 
-    return render(request,'tasks/tasks-catalogue.html', context)
+    return render(request, 'tasks/tasks-catalogue.html', context)
 
 
 def show_completed_tasks(request):
@@ -48,7 +48,7 @@ def show_completed_tasks(request):
         'tasks_with_dates': tasks_with_dates
     }
 
-    return render(request,'tasks/tasks-completed.html', context)
+    return render(request, 'tasks/tasks-completed.html', context)
 
 
 def add_task(request):
@@ -91,3 +91,20 @@ def details_task(request, pk):
     return render(request,
                   'tasks/task-details.html',
                   {'task': current_task})
+
+
+def edit_task(request, pk):
+    current_account = Account.objects.get(username=request.user.username)
+    task_to_edit = current_account.task_set.get(pk=pk)
+
+    if request.method == 'POST':
+        form = TaskEditForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('tasks:details-task', pk=pk)
+    else:
+        form = TaskEditForm(instance=task_to_edit)
+
+    return render(request,
+                  'tasks/task-edit.html',
+                  {'form': form, 'task': task_to_edit})

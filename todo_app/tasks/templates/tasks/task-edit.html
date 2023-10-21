@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    {{ form.media }}
+    <div class="d-flex justify-content-center">
+        <form method="post" action="{% url 'tasks:edit-task' task.pk %}">
+            {% for field in form %}
+                <label>{{ field.label }}</label>
+                <div class="form-group">
+                    {{ field }}
+                </div>
+            {% endfor %}
+            <button type="submit" class="btn btn-success w-25 text-white">Edit</button>
+            {% csrf_token %}
+        </form>
+    </div>
+{% endblock %}

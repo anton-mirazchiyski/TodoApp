@@ -51,3 +51,7 @@ class TaskAddForm(forms.ModelForm):
                 }
             )
         }
+
+
+class TaskEditForm(TaskAddForm):
+    pass

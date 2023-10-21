@@ -23,7 +23,9 @@
             <div class="btn-group" >
                 <div class="mr-5">
                     <button type="button" name="edit" class="btn btn-secondary mr-5 rounded">
-                        <a href="#" class="text-decoration-none text-white">Edit this Task</a>
+                        <a href="{% url 'tasks:edit-task' task.pk %}" class="text-decoration-none text-white">
+                            Edit this Task
+                        </a>
                     </button>
                 </div>
 
