@@ -20,28 +20,31 @@
 
     <div class="d-flex justify-content-center mt-2">
         <form method="post" action="{% url 'tasks:details-task' task.pk %}">
-            <div class="btn-group" >
+            <div class="btn-group">
                 <div class="mr-5">
-                    <button type="button" name="edit" class="btn btn-secondary mr-5 rounded">
-                        <a href="{% url 'tasks:edit-task' task.pk %}" class="text-decoration-none text-white">
+                    <a href="{% url 'tasks:edit-task' task.pk %}" class="text-decoration-none text-white">
+                        <button type="button" name="edit" class="btn btn-secondary mr-5 rounded">
                             Edit this Task
-                        </a>
-                    </button>
+                        </button>
+                    </a>
                 </div>
 
                 <div>
                     {% if task.is_done %}
                         <button type="submit" name="move" class="btn btn-success pb-2 rounded">
-                            Move to Completed</button>
-                        {% else %}
-                            <button type="submit" name="done"
-                                class="btn btn-success pl-4 pr-4 pb-2 rounded">Done</button>
+                            Move to Completed
+                        </button>
+                    {% else %}
+                        <button type="submit" name="done"
+                                class="btn btn-success pl-4 pr-4 pb-2 rounded">Done
+                        </button>
                     {% endif %}
                 </div>
 
                 <div class="ml-5">
                     <button type="submit" name="delete"
-                            class="btn btn-secondary ml-5 rounded">Delete this Task</button>
+                            class="btn btn-secondary ml-5 rounded">Delete this Task
+                    </button>
                 </div>
             </div>
             {% csrf_token %}

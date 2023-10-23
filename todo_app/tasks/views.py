@@ -5,7 +5,8 @@ from django.shortcuts import render, redirect
 from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
 from todo_app.tasks.models import Task
-from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates
+from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates, \
+    disable_fields_if_task_done
 
 
 def show_all_tasks(request):
@@ -98,12 +99,15 @@ def edit_task(request, pk):
     task_to_edit = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':
-        form = TaskEditForm(request.POST)
+        form = TaskEditForm(request.POST, instance=task_to_edit)
+        disable_fields_if_task_done(task_to_edit, form)
         if form.is_valid():
             form.save()
             return redirect('tasks:details-task', pk=pk)
     else:
         form = TaskEditForm(instance=task_to_edit)
+        # disable date and time from editing if task is done
+        disable_fields_if_task_done(task_to_edit, form)
 
     return render(request,
                   'tasks/task-edit.html',

@@ -39,3 +39,10 @@ def place_completed_tasks_by_dates(tasks):
         tasks_with_dates[task.due_date].append(task)
 
     return tasks_with_dates
+
+
+def disable_fields_if_task_done(task, form):
+    if task.is_done:
+        for field in form.fields:
+            if field != 'description':
+                form.fields[field].widget.attrs['disabled'] = True

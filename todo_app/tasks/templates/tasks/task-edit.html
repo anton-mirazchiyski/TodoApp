@@ -10,7 +10,9 @@
                     {{ field }}
                 </div>
             {% endfor %}
-            <button type="submit" class="btn btn-success w-25 text-white">Edit</button>
+            <div class="form-group pt-2">
+                <button type="submit" class="btn btn-success w-25 text-white">Edit</button>
+            </div>
             {% csrf_token %}
         </form>
     </div>
