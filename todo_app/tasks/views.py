@@ -100,13 +100,11 @@ def edit_task(request, pk):
 
     if request.method == 'POST':
         form = TaskEditForm(request.POST, instance=task_to_edit)
-        disable_fields_if_task_done(task_to_edit, form)
         if form.is_valid():
             form.save()
             return redirect('tasks:details-task', pk=pk)
     else:
         form = TaskEditForm(instance=task_to_edit)
-        # disable date and time from editing if task is done
         disable_fields_if_task_done(task_to_edit, form)
 
     return render(request,

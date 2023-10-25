@@ -44,5 +44,4 @@ def place_completed_tasks_by_dates(tasks):
 def disable_fields_if_task_done(task, form):
     if task.is_done:
         for field in form.fields:
-            if field != 'description':
-                form.fields[field].widget.attrs['disabled'] = True
+            form.fields[field].widget.attrs['disabled'] = True

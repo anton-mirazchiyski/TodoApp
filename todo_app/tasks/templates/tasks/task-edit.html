@@ -2,6 +2,13 @@
 
 {% block content %}
     {{ form.media }}
+    {% if task.is_done %}
+        <div class="h5 ml-5">
+            This task is done
+            <br>
+            It cannot be changed
+        </div>
+    {% endif %}
     <div class="d-flex justify-content-center">
         <form method="post" action="{% url 'tasks:edit-task' task.pk %}">
             {% for field in form %}
@@ -9,9 +16,13 @@
                 <div class="form-group">
                     {{ field }}
                 </div>
+                {% if field.errors %}
+                    <div class="alert alert-danger">{{ field.errors }}</div>
+                {% endif %}
             {% endfor %}
             <div class="form-group pt-2">
-                <button type="submit" class="btn btn-success w-25 text-white">Edit</button>
+                <button type="submit" {% if task.is_done %} disabled {% endif %}
+                        class="btn btn-success w-25 text-white">Edit</button>
             </div>
             {% csrf_token %}
         </form>
