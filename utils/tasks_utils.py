@@ -45,3 +45,7 @@ def disable_fields_if_task_done(task, form):
     if task.is_done:
         for field in form.fields:
             form.fields[field].widget.attrs['disabled'] = True
+
+
+def task_in_the_past(task):
+    return task.due_date < datetime.date.today()

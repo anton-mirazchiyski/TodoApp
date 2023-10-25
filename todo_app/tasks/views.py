@@ -6,7 +6,7 @@ from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
 from todo_app.tasks.models import Task
 from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates, \
-    disable_fields_if_task_done
+    disable_fields_if_task_done, task_in_the_past
 
 
 def show_all_tasks(request):
@@ -66,9 +66,7 @@ def add_task(request):
     else:
         form = TaskAddForm()
 
-    return render(request,
-                  'tasks/task-add.html',
-                  {'form': form})
+    return render(request, 'tasks/task-add.html', {'form': form})
 
 
 def details_task(request, pk):
@@ -89,9 +87,11 @@ def details_task(request, pk):
             current_task.save()
             return redirect('tasks:completed-tasks')
 
-    return render(request,
-                  'tasks/task-details.html',
-                  {'task': current_task})
+    context = {
+        'task': current_task,
+        'task_in_the_past': task_in_the_past(current_task)
+    }
+    return render(request, 'tasks/task-details.html', context)
 
 
 def edit_task(request, pk):
@@ -107,6 +107,8 @@ def edit_task(request, pk):
         form = TaskEditForm(instance=task_to_edit)
         disable_fields_if_task_done(task_to_edit, form)
 
-    return render(request,
-                  'tasks/task-edit.html',
-                  {'form': form, 'task': task_to_edit})
+    context = {
+        'form': form,
+        'task': task_to_edit,
+    }
+    return render(request, 'tasks/task-edit.html', context)
