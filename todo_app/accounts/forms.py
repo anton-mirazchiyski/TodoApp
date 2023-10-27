@@ -1,36 +1,31 @@
 from django import forms
+from django.contrib.auth import get_user_model
+from django.contrib.auth.forms import UserCreationForm
 
-from todo_app.accounts.models import Account
+from utils.accounts_utils import set_placeholder
+
+UserModel = get_user_model()
 
 
-class AccountCreateForm(forms.ModelForm):
+class RegistrationForm(UserCreationForm):
+    def __init__(self, *args, **kwargs):
+        super(RegistrationForm, self).__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs['class'] = 'form-control'
+            set_placeholder(field, self.fields)
+
     class Meta:
-        model = Account
-        fields = '__all__'
+        model = UserModel
+        fields = ['username', 'password1', 'password2']
 
         labels = {
             'username': 'Username',
-            'password': 'Password',
-            'repeated_password': 'Password'
-        }
-
-        widgets = {
-            'username': forms.TextInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Username'
-            }),
-            'password': forms.PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Password'
-            }),
-            'repeated_password': forms.PasswordInput(attrs={
-                'class': 'form-control',
-                'placeholder': 'Repeat password'
-            })
+            'password1': 'Password',
+            'password2': 'Repeat Password'
         }
 
 
-class AccountLoginForm(AccountCreateForm):
+class AccountLoginForm(RegistrationForm):
     pass
 
 

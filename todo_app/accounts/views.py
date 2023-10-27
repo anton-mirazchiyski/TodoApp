@@ -1,11 +1,11 @@
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.hashers import make_password
+from django.contrib.auth import authenticate, login, logout, get_user_model
 from django.core.exceptions import ObjectDoesNotExist
 from django.shortcuts import render, redirect
 
-from todo_app.accounts.forms import AccountCreateForm, AccountLoginForm, AccountLogoutForm
-from todo_app.accounts.models import Account
+from todo_app.accounts.forms import RegistrationForm, AccountLoginForm, AccountLogoutForm
+
+
+UserModel = get_user_model()
 
 
 def index(request):
@@ -13,7 +13,7 @@ def index(request):
 
     try:
         username = user.username
-        current_account = Account.objects.get(username=username)
+        current_account = UserModel.objects.get(username=username)
         tasks = current_account.task_set.filter(moved_to_completed=False)
     except ObjectDoesNotExist:
         tasks = None
@@ -27,7 +27,7 @@ def login_account(request):
     if request.method == 'POST':
         form = AccountLoginForm(request.POST)
         username = request.POST['username']
-        password = request.POST['password']
+        password = request.POST['password1']
         user = authenticate(request, username=username, password=password)
         if user is not None:
             login(request, user)
@@ -41,7 +41,6 @@ def login_account(request):
                   {'form': form})
 
 
-@login_required()
 def logout_account(request):
     if request.method == 'POST':
         form = AccountLogoutForm(request.POST)
@@ -56,18 +55,17 @@ def logout_account(request):
 
 def create_new_account(request):
     if request.method == 'POST':
-        form = AccountCreateForm(request.POST)
+        form = RegistrationForm(request.POST)
         if form.is_valid():
             username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            repeated_password = form.cleaned_data.get('repeated_password')
+            password = form.cleaned_data.get('password1')
+            repeated_password = form.cleaned_data.get('password2')
 
             if password == repeated_password:
                 account = form.save(commit=False)
-                account.password = make_password(password)
                 account.save()
 
-                user = Account.objects.get(username=username)
+                user = UserModel.objects.get(username=username)
                 user.set_password(password)
                 user.save()
 
@@ -78,7 +76,7 @@ def create_new_account(request):
         else:
             pass
     else:
-        form = AccountCreateForm()
+        form = RegistrationForm()
     return render(request,
                   'accounts/account-create.html',
                   {'form': form})

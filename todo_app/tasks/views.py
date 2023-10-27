@@ -1,17 +1,19 @@
 import datetime
 
+from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
-from todo_app.accounts.models import Account
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
-from todo_app.tasks.models import Task
 from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates, \
     disable_fields_if_task_done, task_in_the_past
 
 
+UserModel = get_user_model()
+
+
 def show_all_tasks(request):
     current_username = request.user.username
-    current_account = Account.objects.get(username=current_username)
+    current_account = UserModel.objects.get(username=current_username)
     tasks = current_account.task_set.filter(moved_to_completed=False).order_by('id')
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
     done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
@@ -36,7 +38,7 @@ def show_all_tasks(request):
 
 
 def show_completed_tasks(request):
-    current_account = Account.objects.get(username=request.user.username)
+    current_account = UserModel.objects.get(username=request.user.username)
     completed_tasks = current_account.task_set.filter(moved_to_completed=True)
 
     tasks_with_dates = place_completed_tasks_by_dates(list(completed_tasks))
@@ -57,7 +59,7 @@ def add_task(request):
         form = TaskAddForm(request.POST)
         if form.is_valid():
             current_username = request.user.username
-            current_account = Account.objects.get(username=current_username)
+            current_account = UserModel.objects.get(username=current_username)
 
             new_task = form.save(commit=False)
             new_task.save()
@@ -70,7 +72,7 @@ def add_task(request):
 
 
 def details_task(request, pk):
-    current_account = Account.objects.get(username=request.user.username)
+    current_account = UserModel.objects.get(username=request.user.username)
     current_task = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':
@@ -95,7 +97,7 @@ def details_task(request, pk):
 
 
 def edit_task(request, pk):
-    current_account = Account.objects.get(username=request.user.username)
+    current_account = UserModel.objects.get(username=request.user.username)
     task_to_edit = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':

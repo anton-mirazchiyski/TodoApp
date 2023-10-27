@@ -47,7 +47,7 @@ class TaskAddForm(forms.ModelForm):
                 attrs={
                     'class': 'form-control-lg',
                     'style': 'width: 50%',
-                    'placeholder': 'Hour'
+                    'placeholder': 'Time'
                 }
             )
         }

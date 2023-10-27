@@ -1,8 +1,11 @@
+from django.contrib.auth import get_user_model
 from django.core.validators import MinLengthValidator
 from django.db import models
 
-from todo_app.accounts.models import Account
 from todo_app.tasks.validators import validate_date_is_not_in_the_past
+
+
+UserModel = get_user_model()
 
 
 class Task(models.Model):
@@ -24,9 +27,9 @@ class Task(models.Model):
 
     moved_to_completed = models.BooleanField(null=True, default=False)
 
-    date_of_completion = models.DateField(null=True, blank=False)
+    date_of_completion = models.DateField(null=True, blank=True)
 
-    account = models.ForeignKey(Account,
+    account = models.ForeignKey(UserModel,
                                 on_delete=models.CASCADE,
                                 null=True)
 
