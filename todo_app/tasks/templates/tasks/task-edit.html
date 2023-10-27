@@ -4,9 +4,11 @@
     {{ form.media }}
     {% if task.is_done %}
         <div class="h5 ml-5">
-            This task is done
-            <br>
-            It cannot be changed
+            <div class="d-inline-flex p-2 border border-dark rounded">
+                This task is done
+                <br>
+                It cannot be changed
+            </div>
         </div>
     {% endif %}
     <div class="d-flex justify-content-center">

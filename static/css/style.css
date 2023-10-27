@@ -3,6 +3,14 @@
     color: darkblue;
 }
 
-body {
-    background-color: #ef6769;
+.nav-bar {
+    background-color: #ffd7b5;
+}
+
+.nav-element {
+    background-color: #313191;
+}
+
+.button-element {
+    background-color: #313191;
 }
