@@ -1,26 +1,33 @@
 from django.core.exceptions import ValidationError
+from django.utils.translation import gettext as _
 
 
-def validate_name_contains_valid_symbols_and_numbers(name):
-    for char in name:
-        if not char.isalnum() and char != '_':
-            raise ValidationError("Your username can only contain letters, "
-                                  "numbers and underscores.")
+class PasswordStrengthValidator:
+    def __init__(self):
+        self.has_letter = False
+        self.has_digit = False
+        self.has_capital_letter = False
 
+    def check_password(self, password):
+        for char in password:
+            if char.isupper():
+                self.has_capital_letter = True
+            elif char.isalpha():
+                self.has_letter = True
+            elif char.isdigit():
+                self.has_digit = True
 
-def validate_password_is_strong(password):
-    has_letter = False
-    has_digit = False
-    has_capital_letter = False
+    def validate(self, password, user=None):
+        self.check_password(password)
+        if (not self.has_letter) or (not  self.has_capital_letter) or (not self.has_digit):
+            raise ValidationError(
+                _("Password must contain at least one letter, "
+                  "at least one capital letter and at least one number!"),
+                code="password_too_short",
+            )
 
-    for char in password:
-        if char.isupper():
-            has_capital_letter = True
-        elif char.isalpha():
-            has_letter = True
-        elif char.isdigit():
-            has_digit = True
-
-    if (not has_letter) or (not has_capital_letter) or (not has_digit):
-        raise ValidationError('Password must contain at least one letter, '
-                              'at least one capital letter and at least one number!')
+    def get_help_text(self):
+        return _(
+            "Password must contain at least one letter, "
+            "at least one capital letter and at least one number!"
+        )
