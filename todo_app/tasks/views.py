@@ -5,8 +5,7 @@ from django.shortcuts import render, redirect
 
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
 from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates, \
-    disable_fields_if_task_done, task_in_the_past
-
+    disable_fields_if_task_done, task_in_the_past, find_due_date_tasks
 
 UserModel = get_user_model()
 
@@ -19,7 +18,7 @@ def show_all_tasks(request):
     done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
 
     next_task = find_next_task(list(tasks))
-    current_date = datetime.date.today()
+    number_of_due_date_tasks = find_due_date_tasks(list(tasks))
 
     if request.method == 'POST':
         if 'move' in request.POST:
@@ -30,7 +29,7 @@ def show_all_tasks(request):
         'tasks': tasks,
         'has_completed_tasks': has_completed_tasks,
         'next_task': next_task,
-        'current_date': current_date,
+        'number_of_due_date_tasks': number_of_due_date_tasks,
         'number_of_tasks_done': done_tasks.count()
     }
 

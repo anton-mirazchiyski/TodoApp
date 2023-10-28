@@ -51,3 +51,13 @@ def disable_fields_if_task_done(task, form):
 
 def task_in_the_past(task):
     return task.due_date < datetime.date.today()
+
+
+def find_due_date_tasks(tasks):
+    unfinished_due_date_tasks = []
+    for task in tasks:
+        if task_in_the_past(task) and not task.is_done:
+            unfinished_due_date_tasks.append(task)
+
+    num_of_due_date_tasks = len(unfinished_due_date_tasks)
+    return num_of_due_date_tasks
