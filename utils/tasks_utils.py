@@ -38,7 +38,9 @@ def place_completed_tasks_by_dates(tasks):
             tasks_with_dates[task.due_date] = []
         tasks_with_dates[task.due_date].append(task)
 
-    return tasks_with_dates
+    sorted_tasks = dict(sorted(tasks_with_dates.items(), key=lambda x: x[0], reverse=True))
+
+    return sorted_tasks
 
 
 def disable_fields_if_task_done(task, form):

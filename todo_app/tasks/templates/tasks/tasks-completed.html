@@ -1,9 +1,15 @@
 {% extends 'base.html' %}
 
 {% block content %}
-    <div class="d-flex justify-content-center">
-        <h4>Completed:</h4>
-    </div>
+    {% if completed_tasks %}
+        <div class="d-flex justify-content-center">
+            <h4>Completed:</h4>
+        </div>
+        {% else %}
+            <div class="d-flex justify-content-center p-4">
+                <h4>You have no completed tasks at the moment</h4>
+            </div>
+    {% endif %}
     <div class="table-responsive">
         <table class="table table-primary">
             {% for date, tasks in tasks_with_dates.items %}
