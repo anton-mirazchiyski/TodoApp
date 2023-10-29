@@ -10,6 +10,10 @@
                 It cannot be changed
             </div>
         </div>
+    {% else %}
+         <div class="d-flex justify-content-center p-3 mr-5 pr-5">
+        <h4 class="border border-dark rounded p-3">Edit Task</h4>
+    </div>
     {% endif %}
     <div class="d-flex justify-content-center">
         <form method="post" action="{% url 'tasks:edit-task' task.pk %}">
