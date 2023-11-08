@@ -4,8 +4,8 @@ from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
-from utils.tasks_utils import find_next_task, move_done_tasks_to_completed, place_completed_tasks_by_dates, \
-    disable_fields_if_task_done, task_in_the_past, find_due_date_tasks
+from todo_app.utils.tasks_utils import find_next_task, find_due_date_tasks, move_done_tasks_to_completed, \
+    place_completed_tasks_by_dates, task_in_the_past, disable_fields_if_task_done
 
 UserModel = get_user_model()
 

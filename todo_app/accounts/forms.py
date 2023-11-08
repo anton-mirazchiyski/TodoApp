@@ -2,7 +2,7 @@ from django import forms
 from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import UserCreationForm
 
-from utils.accounts_utils import set_placeholder
+from todo_app.utils.accounts_utils import set_placeholder
 
 UserModel = get_user_model()
 
