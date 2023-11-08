@@ -1,18 +1,15 @@
 import datetime
 
-from django.contrib.auth import get_user_model
 from django.shortcuts import render, redirect
 
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
+from todo_app.utils.shared_utils import get_current_account_from_username
 from todo_app.utils.tasks_utils import find_next_task, find_due_date_tasks, move_done_tasks_to_completed, \
     place_completed_tasks_by_dates, task_in_the_past, disable_fields_if_task_done
 
-UserModel = get_user_model()
-
 
 def show_all_tasks(request):
-    current_username = request.user.username
-    current_account = UserModel.objects.get(username=current_username)
+    current_account = get_current_account_from_username(request)
     tasks = current_account.task_set.filter(moved_to_completed=False).order_by('id')
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
     done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
@@ -37,7 +34,7 @@ def show_all_tasks(request):
 
 
 def show_completed_tasks(request):
-    current_account = UserModel.objects.get(username=request.user.username)
+    current_account = get_current_account_from_username(request)
     completed_tasks = current_account.task_set.filter(moved_to_completed=True)
 
     tasks_with_dates = place_completed_tasks_by_dates(list(completed_tasks))
@@ -58,9 +55,7 @@ def add_task(request):
     if request.method == "POST":
         form = TaskAddForm(request.POST)
         if form.is_valid():
-            current_username = request.user.username
-            current_account = UserModel.objects.get(username=current_username)
-
+            current_account = get_current_account_from_username(request)
             new_task = form.save(commit=False)
             new_task.save()
             current_account.task_set.add(new_task)
@@ -72,7 +67,7 @@ def add_task(request):
 
 
 def details_task(request, pk):
-    current_account = UserModel.objects.get(username=request.user.username)
+    current_account = get_current_account_from_username(request)
     current_task = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':
@@ -97,7 +92,7 @@ def details_task(request, pk):
 
 
 def edit_task(request, pk):
-    current_account = UserModel.objects.get(username=request.user.username)
+    current_account = get_current_account_from_username(request)
     task_to_edit = current_account.task_set.get(pk=pk)
 
     if request.method == 'POST':
