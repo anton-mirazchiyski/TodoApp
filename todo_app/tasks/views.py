@@ -44,6 +44,7 @@ def show_completed_tasks(request):
 
     if request.method == 'POST':
         completed_tasks.delete()
+        tasks_with_dates.clear()
 
     context = {
         'completed_tasks': completed_tasks,
