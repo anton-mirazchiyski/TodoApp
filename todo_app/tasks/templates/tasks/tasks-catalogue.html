@@ -68,13 +68,12 @@
         {% if number_of_tasks_done %}
             <div class="float-right h5 p-2 mb-3 mr-5">
                 <div class="mt-3 mr-2 text-wrap" style="width: 13rem">
-                    <form method="post" action="{% url 'tasks:catalogue' %}">
-                        <button type="submit" name="move" class="btn button-element text-white mr-2">
+                    <a href="{% url 'tasks:move-all-done' %}">
+                        <button type="button" name="move" class="btn button-element text-white mr-2">
                             Move
                         </button>
-                            all tasks that are done to 'Completed Tasks'
-                        {% csrf_token %}
-                    </form>
+                    </a>
+                        all tasks that are done to 'Completed Tasks'
                 </div>
             </div>
         {% endif %}

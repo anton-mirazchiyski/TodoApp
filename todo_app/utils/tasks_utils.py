@@ -25,9 +25,8 @@ def find_next_task(tasks):
 
 def move_done_tasks_to_completed(tasks):
     for task in tasks:
-        if task.is_done:
-            task.moved_to_completed = True
-            task.save()
+        task.moved_to_completed = True
+        task.save()
 
 
 def place_completed_tasks_by_dates(tasks):

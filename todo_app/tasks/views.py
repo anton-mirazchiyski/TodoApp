@@ -17,11 +17,6 @@ def show_all_tasks(request):
     next_task = find_next_task(list(tasks))
     number_of_due_date_tasks = find_due_date_tasks(list(tasks))
 
-    if request.method == 'POST':
-        if 'move' in request.POST:
-            move_done_tasks_to_completed(tasks)
-            return redirect('tasks:catalogue')
-
     context = {
         'tasks': tasks,
         'has_completed_tasks': has_completed_tasks,
@@ -79,10 +74,6 @@ def details_task(request, pk):
             current_task.date_of_completion = datetime.date.today()
             current_task.save()
             return redirect('tasks:catalogue')
-        elif 'move' in request.POST:
-            current_task.moved_to_completed = True
-            current_task.save()
-            return redirect('tasks:completed-tasks')
 
     context = {
         'task': current_task,
@@ -109,3 +100,19 @@ def edit_task(request, pk):
         'task': task_to_edit,
     }
     return render(request, 'tasks/task-edit.html', context)
+
+
+def move_all_done_tasks(request):
+    current_account = get_current_account_from_username(request)
+    done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
+    if done_tasks:
+        move_done_tasks_to_completed(done_tasks)
+        return redirect(request.META['HTTP_REFERER'])
+
+
+def move_current_done_task(request, pk):
+    current_account = get_current_account_from_username(request)
+    current_task = current_account.task_set.get(pk=pk)
+    current_task.moved_to_completed = True
+    current_task.save()
+    return redirect('tasks:catalogue')

@@ -36,9 +36,11 @@
 
                 <div>
                     {% if task.is_done %}
-                        <button type="submit" name="move" class="btn btn-success pb-2 rounded">
-                            Move to Completed
-                        </button>
+                        <a href="{% url 'tasks:move' task.pk %}">
+                            <button type="button" name="move" class="btn btn-success pb-2 rounded">
+                                Move to Completed
+                            </button>
+                        </a>
                     {% else %}
                         <button type="submit" name="done"
                                 class="btn btn-success pl-4 pr-4 pb-2 rounded">Done
