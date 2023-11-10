@@ -42,9 +42,11 @@
                             </button>
                         </a>
                     {% else %}
-                        <button type="submit" name="done"
-                                class="btn btn-success pl-4 pr-4 pb-2 rounded">Done
-                        </button>
+                        <a href="{% url 'tasks:complete' task.pk %}">
+                            <button type="button" name="done" class="btn btn-success pl-4 pr-4 pb-2 rounded">
+                                Done
+                            </button>
+                        </a>
                     {% endif %}
                 </div>
 

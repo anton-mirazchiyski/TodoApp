@@ -3,7 +3,7 @@ import datetime
 from django.shortcuts import render, redirect
 
 from todo_app.tasks.forms import TaskAddForm, TaskEditForm
-from todo_app.utils.shared_utils import get_current_account_from_username
+from todo_app.utils.shared_utils import get_current_account_from_username, get_current_task_from_current_account
 from todo_app.utils.tasks_utils import find_next_task, find_due_date_tasks, move_done_tasks_to_completed, \
     place_completed_tasks_by_dates, task_in_the_past, disable_fields_if_task_done
 
@@ -69,11 +69,6 @@ def details_task(request, pk):
         if 'delete' in request.POST:
             current_task.delete()
             return redirect('tasks:catalogue')
-        elif 'done' in request.POST:
-            current_task.is_done = True
-            current_task.date_of_completion = datetime.date.today()
-            current_task.save()
-            return redirect('tasks:catalogue')
 
     context = {
         'task': current_task,
@@ -102,6 +97,14 @@ def edit_task(request, pk):
     return render(request, 'tasks/task-edit.html', context)
 
 
+def complete_task_functionality(request, pk):
+    current_task = get_current_task_from_current_account(request, pk)
+    current_task.is_done = True
+    current_task.date_of_completion = datetime.date.today()
+    current_task.save()
+    return redirect('tasks:catalogue')
+
+
 def move_all_done_tasks(request):
     current_account = get_current_account_from_username(request)
     done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
@@ -111,8 +114,7 @@ def move_all_done_tasks(request):
 
 
 def move_current_done_task(request, pk):
-    current_account = get_current_account_from_username(request)
-    current_task = current_account.task_set.get(pk=pk)
+    current_task = get_current_task_from_current_account(request, pk)
     current_task.moved_to_completed = True
     current_task.save()
     return redirect('tasks:catalogue')
