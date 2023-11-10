@@ -10,10 +10,10 @@ class TaskAddForm(forms.ModelForm):
         fields = ['name', 'description', 'due_date', 'time']
 
         labels = {
-                'name': 'What',
-                'due_date': 'When',
+                'name': 'Name',
+                'due_date': 'Date',
                 'description': 'Description',
-                'time': 'At'
+                'time': 'Time'
                  }
 
         widgets = {

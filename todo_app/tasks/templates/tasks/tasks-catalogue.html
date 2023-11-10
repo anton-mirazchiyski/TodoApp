@@ -22,11 +22,11 @@
         {% endif %}
 
         {% if not number_of_due_date_tasks %}
-            <div class="float-right mt-1 mr-5 text-wrap" style="width: 13rem">
+            <div class="float-right h5 mt-1 mr-5 text-wrap" style="width: 13rem">
                 You have no unfinished tasks that are due date
             </div>
         {% else %}
-            <div class="float-right mt-1 mr-5 text-wrap" style="width: 13rem">
+            <div class="float-right h5 mt-1 mr-5 text-wrap" style="width: 13rem">
                 {% if number_of_due_date_tasks == 1 %}
                     You have <span class="text-danger">{{ number_of_due_date_tasks }}</span>
                     unfinished task that is due date
@@ -43,7 +43,7 @@
 
         {% for task in tasks %}
             <a class="text-decoration-none" href="{% url 'tasks:details-task' task.pk %}">
-                <div class="task mb-3 ml-3 mr-4 rounded
+                <div class="task p-1 mb-3 ml-3 mr-4 rounded
                 row border border-dark">
                     <div class="col pt-3">
                         {{ forloop.counter }}
