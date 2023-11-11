@@ -14,8 +14,8 @@ def show_all_tasks(request):
     has_completed_tasks = current_account.task_set.filter(moved_to_completed=True).count() > 0
     done_tasks = current_account.task_set.filter(is_done=True, moved_to_completed=False)
 
-    next_task = find_next_task(list(tasks))
-    number_of_due_date_tasks = find_due_date_tasks(list(tasks))
+    next_task = find_next_task(tasks)
+    number_of_due_date_tasks = find_due_date_tasks(tasks)
 
     context = {
         'tasks': tasks,
@@ -65,11 +65,6 @@ def details_task(request, pk):
     current_account = get_current_account_from_username(request)
     current_task = current_account.task_set.get(pk=pk)
 
-    if request.method == 'POST':
-        if 'delete' in request.POST:
-            current_task.delete()
-            return redirect('tasks:catalogue')
-
     context = {
         'task': current_task,
         'task_in_the_past': task_in_the_past(current_task)
@@ -117,4 +112,10 @@ def move_current_done_task(request, pk):
     current_task = get_current_task_from_current_account(request, pk)
     current_task.moved_to_completed = True
     current_task.save()
+    return redirect('tasks:catalogue')
+
+
+def delete_task(request, pk):
+    current_task = get_current_task_from_current_account(request, pk)
+    current_task.delete()
     return redirect('tasks:catalogue')

@@ -22,41 +22,40 @@
     </div>
 
     <div class="d-flex justify-content-center mt-2">
-        <form method="post" action="{% url 'tasks:details-task' task.pk %}">
-            <div class="btn-group">
-                <div class="mr-5">
-                    <a href="{% url 'tasks:edit-task' task.pk %}" class="text-decoration-none text-white">
-                        <button type="button" name="edit"
-                                {% if task_in_the_past %} disabled {% endif %}
-                                class="btn btn-secondary mr-5 rounded">
-                            Edit this Task
+        <div class="btn-group">
+            <div class="mr-5">
+                <a href="{% url 'tasks:edit-task' task.pk %}" class="text-decoration-none text-white">
+                    <button type="button" name="edit"
+                            {% if task_in_the_past %} disabled {% endif %}
+                            class="btn btn-secondary mr-5 rounded">
+                        Edit this Task
+                    </button>
+                </a>
+            </div>
+
+            <div>
+                {% if task.is_done %}
+                    <a href="{% url 'tasks:move' task.pk %}">
+                        <button type="button" name="move" class="btn btn-success pb-2 rounded">
+                            Move to Completed
                         </button>
                     </a>
-                </div>
+                {% else %}
+                    <a href="{% url 'tasks:complete' task.pk %}">
+                        <button type="button" name="done" class="btn btn-success pl-4 pr-4 pb-2 rounded">
+                            Done
+                        </button>
+                    </a>
+                {% endif %}
+            </div>
 
-                <div>
-                    {% if task.is_done %}
-                        <a href="{% url 'tasks:move' task.pk %}">
-                            <button type="button" name="move" class="btn btn-success pb-2 rounded">
-                                Move to Completed
-                            </button>
-                        </a>
-                    {% else %}
-                        <a href="{% url 'tasks:complete' task.pk %}">
-                            <button type="button" name="done" class="btn btn-success pl-4 pr-4 pb-2 rounded">
-                                Done
-                            </button>
-                        </a>
-                    {% endif %}
-                </div>
-
-                <div class="ml-5">
-                    <button type="submit" name="delete"
+            <div class="ml-5">
+                <a href="{% url 'tasks:delete-task' task.pk %}">
+                    <button type="button" name="delete"
                             class="btn btn-secondary ml-5 rounded">Delete this Task
                     </button>
-                </div>
+                </a>
             </div>
-            {% csrf_token %}
-        </form>
+        </div>
     </div>
 {% endblock %}
