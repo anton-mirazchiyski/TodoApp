@@ -4,7 +4,7 @@ from django import forms
 from todo_app.tasks.models import Task
 
 
-class TaskAddForm(forms.ModelForm):
+class TaskBaseForm(forms.ModelForm):
     class Meta:
         model = Task
         fields = ['name', 'description', 'due_date', 'time']
@@ -53,5 +53,9 @@ class TaskAddForm(forms.ModelForm):
         }
 
 
-class TaskEditForm(TaskAddForm):
+class TaskAddForm(TaskBaseForm):
+    pass
+
+
+class TaskEditForm(TaskBaseForm):
     pass
